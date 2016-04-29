@@ -36,6 +36,7 @@ Type
 	tmTemasAsignados = array [tIndiceDj, tIndiceTemasPorDj] of tTitulo;
 	tvCantTemasPorDj= array [tIndiceTemasPorDj] of tBaseCantTemasPorDj;
 	tCantDjs=0..MaxDj;
+	tvAcumTiempo=array [1..maxdj] of word;
 Var
 	vTemasOficiales: tvTemasOficiales;
 	vDuracion: tvDuracion;
@@ -45,7 +46,7 @@ Var
 	Titulo: tTitulo;
     DuracionEnSeg: tBaseDuracion;
     CantDjs:tCantDjs; {funciona como ml (cuantos djs hay?) (numerico)}
-
+	VAcumTiempo:tvAcumTiempo;
 
 
 
@@ -267,6 +268,7 @@ Begin
 	clrscr; 
 	CargarListaOficial(vtemasOficiales,vDuracion);
 	CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
+	BuscoMaximo(mTemasAsignados,vAcumTiempo,vDj,vDuracion,vTemasoficiales);
 
 	{Esta hecho lo de cargar las listas de temas y de Djs}
 
