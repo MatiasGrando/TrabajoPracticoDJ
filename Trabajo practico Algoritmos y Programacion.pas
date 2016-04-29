@@ -253,7 +253,7 @@ End;
 {----------------Procedimientos Lista Djs----------------------------}
 
 Procedure LeerNombreDJ(var vDj:tvDj; numeroDj:tIndiceDj);
-
+{Lee y valida los nombres de los DJ los carga al vector vDj}
 	var
 	DjAux: string;
 	i:byte;
@@ -282,6 +282,7 @@ Procedure LeerNombreDJ(var vDj:tvDj; numeroDj:tIndiceDj);
 	end;
 
 function EstaDentroLista(Tema:string; Lista:tvTemasOficiales):boolean;
+{Esta funcion verifica si el tema ingresado esta dentro de la lista de temas oficiales y devuelve un booleano}
 	var 
 	i:byte;
 
@@ -300,6 +301,7 @@ function EstaDentroLista(Tema:string; Lista:tvTemasOficiales):boolean;
 	end;
 
 Procedure IniVector(vector:tvCantTemasPorDj);
+{Inicializa el vector vCantTemasPorDj en 0}
 	var 
 	i:tIndiceTemasPorDj;
 	
@@ -309,6 +311,7 @@ Procedure IniVector(vector:tvCantTemasPorDj);
 	end;
 
 function EstaRepetidoTema(Tema:string; mTemas:tmTemasAsignados; numeroDj:tIndiceDj; mlTemas:tBaseCantTemasPorDj):boolean;
+{Esta funcion verifica si el tema ingresado ya fue ingresado anteriormente y devuelve un booleano}
 	var
 	i:byte;
 	encontro:boolean;
@@ -337,13 +340,15 @@ function EstaRepetidoTema(Tema:string; mTemas:tmTemasAsignados; numeroDj:tIndice
 	end;
 
 Procedure IngresarTemasDj(var mTemas:tmTemasAsignados;var vCantTemasPorDj:tvCantTemasPorDj; ListaTemas:tvTemasOficiales; numeroDj:tIndiceDj);
+{Este procedimiento recibe los temas que tocara cada Dj, los verifica por medio de las funciones EstaDentroLista y EstaRepetido
+y los guarda dentro de la matriz mTemasAsignados ademas modifica el vector vCantTemasPorDj que funciona como ML}
 	var
 	i: tIndiceTemasOficiales;
 	AuxTema:string;
 	j:byte;
 
 	begin
-	Writeln('Estas son las canciones disponibles'); {Esta parte se podria sacar, pero me parecio bueno ponerlo}
+	Writeln('Estas son las canciones disponibles'); {Esta parte no es necesaria, pero me parecio bueno ponerla}
 	for i:=1 to MaxTemasOficiales do 
 		begin
 		if (i < MaxTemasOficiales) then {Muestra todas las canciones}
@@ -374,7 +379,7 @@ Procedure IngresarTemasDj(var mTemas:tmTemasAsignados;var vCantTemasPorDj:tvCant
 
 
 Procedure CargarInfoDJs(var vDj:tvDj;var vCantTemasPorDj:tvCantTemasPorDj; var mTemasAsignados:tmTemasAsignados; vTemasOficiales:tvTemasOficiales;CantDjs:tCantDjs);
-
+{Recibe la cantidad de Djs que tocaran y llama a los procedimientos LeerNombreDJ y IngresarTemasDj}
 var
 i:tIndiceDj;
 mlDj:byte;
