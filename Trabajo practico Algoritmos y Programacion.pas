@@ -35,6 +35,8 @@ Type
 	tvCantTemasPorDj= array [tIndiceTemasPorDj] of tBaseCantTemasPorDj;
 	tCantDjs=0..MaxDj;
 	tvAcumTiempo= array [1..maxdj] of word;
+	 tvCont=array[1..maxtemasoficiales] of word;
+	 
 Var
 	vTemasOficiales: tvTemasOficiales;
 	vDuracion: tvDuracion;
@@ -45,7 +47,7 @@ Var
         DuracionEnSeg: tBaseDuracion;
         CantDjs:tCantDjs; {funciona como ml (cuantos djs hay?) (numerico)}
         vAcumTiempo:tvacumtiempo;
-
+	vCont:tvCont;
 
 
 
@@ -165,7 +167,73 @@ begin
         djmaxtoca(vAcumTiempo,vDj);
 end;
 
+{----------------Procedimientos Mas Repetido--------------------------}
 
+
+Procedure EscribirTemaMaxRepetido(vTemasOficiales:tvTemasOficiales;vCont:tvCont;vDuracion:tvDuracion;maxrep:word);
+
+var
+i:byte;
+
+begin
+for i:=1 to maxtemasoficiales do
+        if vCont[i]=maxrep then
+        begin
+         write(vTemasOficiales[i],' ');
+         PasarAFormatoValido(vDuracion[i]);
+         end;
+end;
+
+
+Procedure BuscarMaxRepetido(vCont:tvCont;maxrep:word;vDuracion:tvDuracion;vTemasOficiales:tvTemasOficiales);
+
+var
+        cont,i:byte;
+
+begin
+cont:=0;
+for i:=1 to maxtemasoficiales do
+        if vCont[i]=maxrep then
+                cont:=cont+1;
+        if cont>1 then
+begin
+        writeln('Los temas mas repetidos son:');
+        EscribirTemaMaxRepetido(vTemasOficiales,vCont,vDuracion,maxrep);
+end;
+if cont=1 then
+begin
+        writeln('El tema mas repetido es:');
+        EscribirTemaMaxRepetido(vTemasOficiales,vCont,vDuracion,maxrep);
+end;
+end;
+
+
+Procedure TemasMaxRepetidos(mTemasAsignados:tmTemasAsignados;vTemasOficiales:tvTemasOficiales;var vCont:tvCont;vDuracion:tvDuracion);
+
+var
+        y,x,i:byte;
+        maxrep,cont:word;
+begin
+maxrep:=0;
+for i:=1 to maxtemasoficiales do
+begin
+        cont:=0;
+        for y:=1 to maxdj do
+        begin
+                x:=1;
+                repeat
+                        if mTemasAsignados[y,x]=vTemasOficiales[i] then
+                                cont:=cont+1;
+                        x:=x+1;
+                until (x=maxtemaspordj) or (mTemasAsignados[y,x]=parar);
+        end;
+        vCont[i]:=cont;
+end;
+for i:=1 to maxtemasoficiales do
+        if (vCont[i]>maxrep) then
+                maxrep:=vCont[i];
+BuscarMaxRepetido(vCont,maxrep,vDuracion,vTemasOficiales);
+end;
 
 {----------------Procedimientos Lista Temas----------------------------}
 
@@ -413,6 +481,7 @@ Begin
 	CargarListaOficial(vtemasOficiales,vDuracion);
 	CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
 	BuscoMaximo (mTemasAsignados, vAcumTiempo, vDj,vDuracion,vTemasOficiales);
-	{Esta hecho lo de cargar las listas de temas y de Djs y el punto 3 de buscar el dj que toca mas tiempo}
+	TemasMaxRepetidos(mTemasAsignados,vTemasOficiales,vCont,vDuracion);
+	{Esta hecho lo de cargar las listas de temas y de Djs, el punto 3 y el punto 4}
 
 End.
