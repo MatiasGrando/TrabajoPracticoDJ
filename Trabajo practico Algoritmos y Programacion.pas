@@ -56,7 +56,7 @@ Var
 
 
 
-procedure PasarAFormatoValido(var maxaux:word);
+procedure PasarAFormatoValido(maxaux:word);
 {aca paso el formato segundos a formato hh:mm:ss}
 
 var
