@@ -1,11 +1,10 @@
-Program	SubprogramaTpCargarDatos;
+Program SubprogramaTpCargarDatos;
 
 {Concierto con 25 dj's como max y 35 temas cada uno como max. 200 temas con sus duraciones mm:ss
 en una lista oficial.
 Hasta 25 nombres de DJ's y sus temas elegidos (no repetidos) a travez de un menu.
 Los datos ingresados deben:
 a)ser validados
-
 Hasta ahora estan hechas las listas de Temas y de Djs, los datos se validan cuando se van ingresando. Hay algunos lugares
 donde los operadores tiran una warning pero yo creo que funcionan bien y es problema de pascal que lo tira nomas como advertencia}
 
@@ -36,7 +35,7 @@ Type
 	tCantDjs=0..MaxDj;
 	tvAcumTiempo= array [1..maxdj] of word;
 	 tvCont=array[1..maxtemasoficiales] of word;
-	 
+
 Var
 	vTemasOficiales: tvTemasOficiales;
 	vDuracion: tvDuracion;
@@ -64,7 +63,7 @@ var
         st0:string[1];
         st1, st2, st3:string[2];
         mins, seg, horas: word;
-        car: char;
+
 begin
         staux:='';
         st0:='0';
@@ -72,15 +71,15 @@ begin
         mins:=(maxaux mod 3600) div 60;
         seg:=maxaux-((horas*3600)+(mins*60));
         str(horas,st1);
-        if horas<10 then
-                insert(st1,st0,1);
         str(mins,st2);
-        if mins<10 then
-                insert(st2,st0,1);
         str(seg,st3);
-        if seg<10 then
-                insert(st3,st0,1);
         staux:=concat(st1,':',st2,':',st3);
+        if horas<10 then
+                insert(st0,staux,1);
+        if mins<10 then
+                insert(st0,staux,4);
+        if seg<10 then
+                insert(st0,staux,7);
         writeln(staux);
 
 end;
@@ -180,7 +179,7 @@ for i:=1 to maxtemasoficiales do
         if vCont[i]=maxrep then
         begin
          write(vTemasOficiales[i],' ');
-         PasarAFormatoValido(vDuracion[i]);
+         PasarAFormatoValido(vDuracion[i]); {Reutilizo codigo usado para ver el dj que mas tiempo toca}
          end;
 end;
 
@@ -351,13 +350,13 @@ Procedure LeerNombreDJ(var vDj:tvDj; numeroDj:tIndiceDj);
 
 function EstaDentroLista(Tema:string; Lista:tvTemasOficiales):boolean;
 {Esta funcion verifica si el tema ingresado esta dentro de la lista de temas oficiales y devuelve un booleano}
-	var 
+	var
 	i:byte;
 
 	begin
 	i:=0;
 	repeat
-		i:= i+1 
+		i:= i+1
 	until (Tema = Lista[i]) or (i = MaxTemasOficiales);
 	if (Tema = Lista[i]) then
 		EstaDentroLista:=True
@@ -370,9 +369,9 @@ function EstaDentroLista(Tema:string; Lista:tvTemasOficiales):boolean;
 
 Procedure IniVector(vector:tvCantTemasPorDj);
 {Inicializa el vector vCantTemasPorDj en 0}
-	var 
+	var
 	i:tIndiceTemasPorDj;
-	
+
 	begin
 	for i:=1 to MaxTemasPorDj do
 	vCantTemasPorDj[i] := 0
@@ -417,11 +416,11 @@ y los guarda dentro de la matriz mTemasAsignados ademas modifica el vector vCant
 
 	begin
 	Writeln('Estas son las canciones disponibles'); {Esta parte no es necesaria, pero me parecio bueno ponerla}
-	for i:=1 to MaxTemasOficiales do 
+	for i:=1 to MaxTemasOficiales do
 		begin
 		if (i < MaxTemasOficiales) then {Muestra todas las canciones}
 		Write(ListaTemas[i], ', ')
-		else 
+		else
 		Write(ListaTemas[i])
 		end;
 	Writeln();
@@ -458,7 +457,7 @@ begin
 	repeat
 	begin
 	Readln(mlDj);
-	if (mlDj > MaxDj) Then   
+	if (mlDj > MaxDj) Then
 		Writeln('Ese numero no esta comprendido dentro del limite de ',MaxDj, 'reingrese la cantidad');
 	end;
 	until (mlDj <= MaxDj) and (mlDj > 0);
@@ -476,8 +475,8 @@ end;
 
 {---------PROGRAMA PRINCIPAL---------}
 
-Begin 
-	clrscr; 
+Begin
+	clrscr;
 	CargarListaOficial(vtemasOficiales,vDuracion);
 	CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
 	BuscoMaximo (mTemasAsignados, vAcumTiempo, vDj,vDuracion,vTemasOficiales);
@@ -485,3 +484,4 @@ Begin
 	{Esta hecho lo de cargar las listas de temas y de Djs, el punto 3 y el punto 4}
 
 End.
+
