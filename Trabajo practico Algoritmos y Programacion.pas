@@ -6,15 +6,16 @@ Hasta 25 nombres de DJ's y sus temas elegidos (no repetidos) a travez de un menu
 Los datos ingresados deben:
 a)ser validados
 Hasta ahora estan hechas las listas de Temas y de Djs, los datos se validan cuando se van ingresando. Hay algunos lugares
-donde los operadores tiran una warning pero yo creo que funcionan bien y es problema de pascal que lo tira nomas como advertencia}
+donde los operadores tiran una warning pero yo creo que funcionan bien y es problema de pascal que lo tira nomas como advertencia
+nombres alfanumericos-que passa si en el putno 2b tienen la misma duracion?}
 
-Uses Crt;
+
 
 Const
 	Parar = '0'; {esta frase frena la carga de canciones}
-	MaxTemasOficiales = 2;
+	MaxTemasOficiales = 3;
 	MaxDuracion = 600;
-	MaxDj = 25;
+	MaxDj = 3;
 	MaxTemasPorDj = 35;
 	CaracteresTitulo = 30;
 	CaracteresNombre = 20;
@@ -31,7 +32,7 @@ Type
     tIndiceTemasPorDj = 1..MaxTemasPorDj;
     tBaseCantTemasPorDj = 0..MaxTemasPorDj;
 	tmTemasAsignados = array [tIndiceDj, tIndiceTemasPorDj] of tTitulo;
-	tvCantTemasPorDj= array [tIndiceTemasPorDj] of tBaseCantTemasPorDj;
+	tvCantTemasPorDj = array [tIndiceTemasPorDj] of tBaseCantTemasPorDj;
 	tCantDjs=0..MaxDj;
 	tvAcumTiempo= array [1..maxdj] of word;
 	 tvCont=array[1..maxtemasoficiales] of word;
@@ -469,19 +470,198 @@ begin
 		IngresarTemasDj(mTemasAsignados,vCantTemasPorDj,vTemasOficiales,i);
 		end;
 end;
+{-----------------------------------------------------------------------PUNTO 2-------------------------------------------------------------------------------}
+Procedure mostrarListasA1(vDj:tvDj);
+	var i:byte;
+	begin
+	for i:=1 to MaxDj do
+		Writeln(vDj[i]);
+	
+	end;
+Procedure mostrarListasA2(vDj:tvDj);
+	var i,j:byte;
+		aux:tNombre;
+	begin
+	 for i:=1 to (MaxDj-1) do
+	 	for j:=1 to (MaxDj-1) do
+	 		if vDj[j]>vDj[j+1] then
+	 		begin
+	 			aux:=vDj[j];
+	 			vDj[j]:=vDj[j+1];
+	 			vDj[j+1]:= aux ;
+	 		end;
+	 	
+	
+	 for i:=1 to (MaxDj) do
+	 	writeln(vDj[i]);
+	end;
 
 
+
+Procedure MostrarListasA (vDj:tvDj);
+	var auxdecision:byte;
+
+begin
+	 writeln('Ver listado de Djs') ;
+	 writeln('1- En el orden en que fueron ingresados');
+	 writeln('2- En el orden en que fueron ingresados  o alfabéticamente en formaascendente');
+	 readln(auxdecision);
+	 if (auxdecision=1) then mostrarListasA1(vDj);
+	 if (auxdecision= 2) then MostrarListasA2(vDj);
+	 if (auxdecision<>1) and (auxdecision<>2) Then
+		begin
+		Writeln('VALOR NO VALIDO');
+		MostrarListasA(vDj);
+		end;
+end;
+{---------------------------------------------------------------------------}
+Procedure mostrarListasB1(vTemasOficiales: tvTemasOficiales);{temas acendente y duracion desendente}
+var i,j:byte;
+	aux:tTitulo;
+begin
+	for i:=1 to (MaxTemasOficiales-1) do
+		for j:=1 to (MaxTemasOficiales-1) do
+			if vTemasOficiales[j]>vDj[j+1] then
+	 		begin
+	 			aux:=vTemasOficiales[j];
+	 			vTemasOficiales[j]:=vTemasOficiales[j+1];
+	 			vTemasOficiales[j+1]:= aux ;
+	 		end;
+	 for i:=1 to (MaxTemasOficiales) do
+	 	writeln(vTemasOficiales[i]);
+
+end;
+
+
+
+Procedure mostrarListasB2(vTemasOficiales: tvTemasOficiales;vDuracion: tvDuracion);
+var
+	i,j:byte;
+	auxTitulo:tTitulo;
+	auxDuracion:tBaseDuracion;
+begin
+	for i:=1 to (MaxTemasOficiales-1) do
+		for j:=1 to (MaxTemasOficiales-1) do
+			if( vDuracion[j] < vDuracion[j+1]) Then
+				begin
+				auxDuracion := vDuracion[j];
+				vDuracion[j] := vDuracion[j+1];
+				vDuracion[j+1]:= auxDuracion;
+				auxTitulo := vTemasOficiales[j];
+				vTemasOficiales[j]:= vTemasOficiales[j+1];
+				vTemasOficiales[j+1] := auxTitulo
+				end;
+	for i:=1 to MaxTemasOficiales do
+		Writeln(  vTemasOficiales[i],('  ---> '),(vDuracion[i] div 60),(':'),(vDuracion[i] mod 60)    );
+end;
+
+
+
+Procedure MostrarListasB(vTemasOficiales: tvTemasOficiales;vDuracion: tvDuracion);
+var auxdecision:byte;
+
+begin 	
+	writeln('Ver listado de temas') ;
+	writeln('1- Ordenado alfabéticamente en forma ascendente');
+	writeln('2- Ordenado por duracion en forma descendente');
+	readln(auxdecision);
+	if (auxdecision=1) then mostrarListasB1(vTemasOficiales);
+	if (auxdecision=2) then	mostrarListasB2(vTemasOficiales,vDuracion);
+	if (auxdecision<>1) and (auxdecision<>2) Then
+		begin
+		Writeln('VALOR NO VALIDO');
+		MostrarListasB(vTemasOficiales,vDuracion);
+		end;
+
+end;
+{----------------------------------------------------------------------------}
+function Posicion (vDj:tvDj;AuxNombre:tNombre;CantDjs:tCantDjs) : tIndiceDj;
+ var
+ i:tIndiceDj;
+ begin
+ i:=1;
+ while (i <= CantDjs ) and (vDj[i] <> AuxNombre ) do
+ 	i:= i+1 ;
+
+ 	posicion:= i ;
+
+ end;
+
+
+
+
+Procedure mostrarListasC1(vDj: tvDj ;mTemasAsignados: tmTemasAsignados;CantDjs:tCantDjs);
+	var     auxnombre:tnombre;
+		i:tIndiceTemasPorDj;
+
+	begin
+	writeln('Ingrese nombre del Dj');
+	readln(AuxNombre);
+	{validar-----------------------------------------------------------}
+
+
+        for i:=1 to MaxTemasPorDj do
+		writeln(mTemasAsignados[posicion(vDj,AuxNombre,CantDjs),i]);
+
+	end;
+
+
+
+Procedure MostrarListasC(vDj: tvDj;mTemasAsignados: tmTemasAsignados;CantDjs:tCantDjs);
+var auxdecision:byte;
+	AuxNombre:tNombre;
+
+
+begin
+	writeln('Ver listado de temas de un Dj') ;
+	writeln('1- Listado de temas de un Dj temas que tocara ordenados por duración de cada tema en forma ascendente');
+	writeln('2- Listado de temas de un Dj temas que tocara ordenados según el orden que fueron ingresados');
+	readln(auxdecision);
+	if (auxdecision=1) then mostrarListasC1(vDj,mTemasAsignados,CantDjs);
+
+	if (auxdecision<>1) and (auxdecision<>2) Then
+		begin
+		Writeln('VALOR NO VALIDO');
+		MostrarListasC(vDj,mTemasAsignados,CantDjs);
+		end;
+
+
+end;
+
+Procedure MostrarListas (vDj: tvDj; vTemasOficiales: tvTemasOficiales;vDuracion: tvDuracion;mTemasAsignados: tmTemasAsignados;CantDjs:tCantDjs);
+var
+auxdecision:byte;
+begin
+	writeln('Ingrese 1- si quiere el listado de Dj: en el orden en que fueron ingresados o alfabéticamente en forma ascendente');
+	writeln('Ingrese 2- si quiere el listado de Temas: alfabéticamente en forma ascendente o por duración del tema en forma descendente');
+	writeln('Ingrese 3- si quiere la lista de temas de un Dj determinado: se pide ingresar un DJ y mostrar los temas que tocara ordenados por duración de cada tema en forma ascendente o según el orden que fueron ingresados.');
+	readln(auxdecision);
+	if (auxdecision = 1) then MostrarListasA(vDj) ;
+
+	if (auxdecision= 2) then MostrarListasB(vTemasOficiales,vDuracion) ;
+
+	if (auxdecision=3) then MostrarListasC(vDj,mTemasAsignados,CantDjs) ;
+	if (auxdecision<>1) and (auxdecision<>2) and (auxdecision<>3) Then
+	begin
+	Writeln('VALOR NO VALIDO.');
+	MostrarListas(vDj,vTemasOficiales,vDuracion,mTemasAsignados,cantdjs);
+	end;
+
+
+end;
 
 
 {---------PROGRAMA PRINCIPAL---------}
 
 Begin
-	clrscr;
+
 	CargarListaOficial(vtemasOficiales,vDuracion);
 	CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
+	MostrarListas(vDj,vTemasOficiales,vDuracion,mtemasasignados,cantdjs);
 	BuscoMaximo (mTemasAsignados, vAcumTiempo, vDj,vDuracion,vTemasOficiales);
 	TemasMaxRepetidos(mTemasAsignados,vTemasOficiales,vCont,vDuracion);
+        readln;
+
 	{Esta hecho lo de cargar las listas de temas y de Djs, el punto 3 y el punto 4}
 
 End.
-
