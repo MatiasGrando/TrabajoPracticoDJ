@@ -728,9 +728,9 @@ end;
 Begin
 CargarDjs:= false;
 CargarTemas:= false;
-Writeln('Acontinuacion Ingrese "1" para cargar la lista oficial de temas o "2" para cargar la lista oficial de Djs');
 repeat
 	begin
+	Writeln('Acontinuacion Ingrese "1" para cargar la lista oficial de temas o "2" para cargar la lista oficial de Djs');
 	readln(OpcionMenu);
 	case OpcionMenu of
 		1:begin
@@ -745,9 +745,9 @@ repeat
 	end
 	end
 until (CargarDjs = true) and (CargarTemas = true);
-Writeln('Ahora, Ingrese "1" para mostrar las listas cargadas, "2" para mostrar que Djs tocaran mas tiempo, "3" para mostrar los temas que se tocaran mas veces o "0" para terminar');
 repeat
 	Begin
+	Writeln('Ahora, Ingrese "1" para mostrar las listas cargadas, "2" para mostrar que Djs tocaran mas tiempo, "3" para mostrar los temas que se tocaran mas veces o "0" para terminar');
 	Readln(OpcionMenu);
 	case OpcionMenu of
 		0:writeln();
