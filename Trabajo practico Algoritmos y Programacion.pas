@@ -2,12 +2,7 @@ Program TP1_Concierto;
 
 {Concierto con 25 dj's como max y 35 temas cada uno como max. 200 temas con sus duraciones mm:ss
 en una lista oficial.
-Hasta 25 nombres de DJ's y sus temas elegidos (no repetidos) a travez de un menu.
-Los datos ingresados deben:
-a)ser validados
-Hasta ahora estan hechas las listas de Temas y de Djs, los datos se validan cuando se van ingresando. Hay algunos lugares
-donde los operadores tiran una warning pero yo creo que funcionan bien y es problema de pascal que lo tira nomas como advertencia
-nombres alfanumericos-que passa si en el putno 2b tienen la misma duracion?}
+Hasta 25 nombres de DJ's y sus temas elegidos (no repetidos) a travez de un menu.}
 
 
 
