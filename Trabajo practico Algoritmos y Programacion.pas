@@ -1,4 +1,4 @@
-Program SubprogramaTpCargarDatos;
+Program TP1_Concierto;
 
 {Concierto con 25 dj's como max y 35 temas cada uno como max. 200 temas con sus duraciones mm:ss
 en una lista oficial.
