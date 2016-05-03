@@ -618,9 +618,9 @@ function PosicionTema(mTemasAsignados: tmTemasAsignados; vTemasOficiales: tvTema
 		PosicionTema:= j ;
 	end;
 Procedure OrdenarListasC1(var VecOrdPorSeg:tVecOrdPorSeg ;var vecOrdParaleloTemasPorSeg:tvecOrdParaleloTemasPorSeg);
-	var i,j:tIndiceDj;
+	var i,j:tIndiceTemasPorDj;
 		aux:tBaseDuracion;
-		auxParalelo:tIndiceDj;
+		auxParalelo:tIndiceTemasPorDj;
 	begin
 		for i:=1 to (MaxTemasPorDj-1) do
 			for  j:=1 to (MaxTemasPorDj-1) do
