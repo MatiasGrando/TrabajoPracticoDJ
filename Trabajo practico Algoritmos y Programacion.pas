@@ -13,7 +13,7 @@ nombres alfanumericos-que passa si en el putno 2b tienen la misma duracion?}
 
 Const
 	Parar = '0'; {esta frase frena la carga de canciones}
-	MaxTemasOficiales = 3;
+	MaxTemasOficiales = 35;
 	MaxDuracion = 600;
 	MaxDj = 3;
 	MaxTemasPorDj = 35;
@@ -50,6 +50,8 @@ Var
         CantDjs:tCantDjs; {funciona como ml (cuantos djs hay?) (numerico)}
         vAcumTiempo:tvacumtiempo;
 	vCont:tvCont;
+	OpcionMenu:Byte;
+	CargarTemas, CargarDjs:boolean;
 
 
 
@@ -609,18 +611,21 @@ function PosicionDj (vDj:tvDj;AuxNombre:tNombre;CantDjs:tCantDjs) : tIndiceDj;
 {---------------------------------------------------------------------------}
 function PosicionTema(mTemasAsignados: tmTemasAsignados; vTemasOficiales: tvTemasOficiales; auxdjposicion:tIndiceDj; i:tIndiceTemasPorDj):tIndiceTemasOficiales;
 	var
-	j:tIndiceTemasOficiales;
+	j:byte;
 
 	begin
-		j:=1  ;
-		while (j <= MaxTemasOficiales) and (mTemasAsignados[auxdjposicion,i] <>  vTemasOficiales[j] ) do
-				j:= j+1;
+		j:=0  ;
+		repeat
+		begin 
+		j:= j+1;
 		PosicionTema:= j ;
+		end
+		until (j = MaxTemasOficiales) or (mTemasAsignados[auxdjposicion,i] = vTemasOficiales[j] );
 	end;
 Procedure OrdenarListasC1(var VecOrdPorSeg:tVecOrdPorSeg ;var vecOrdParaleloTemasPorSeg:tvecOrdParaleloTemasPorSeg);
-	var i,j:tIndiceTemasPorDj;
+	var i,j:byte;
 		aux:tBaseDuracion;
-		auxParalelo:tIndiceTemasPorDj;
+		auxParalelo:tIndiceDj;
 	begin
 		for i:=1 to (MaxTemasPorDj-1) do
 			for  j:=1 to (MaxTemasPorDj-1) do
@@ -657,10 +662,9 @@ Procedure MostrarListasC1(vDj:tvDj; mTemasAsignados:tmTemasAsignados; CantDjs:tC
 				vecOrdParaleloTemasPorSeg[i]:= j;
 				j:= (j+1) ;
 			end;
-
 		for i:=1 to MaxTemasPorDj do
 			begin
-			auxPosicionTema:=[PosicionTema(mTemasAsignados,vTemasOficiales,auxdjposicion,i)];
+			auxPosicionTema:=PosicionTema(mTemasAsignados,vTemasOficiales,auxdjposicion,i);
 			VecOrdPorSeg[i]:= vDuracion[auxPosicionTema];
 			end;
 
@@ -725,15 +729,40 @@ end;
 {---------PROGRAMA PRINCIPAL---------}
 
 Begin
+CargarDjs:= false;
+CargarTemas:= false;
+Writeln('Acontinuacion Ingrese "1" para cargar la lista oficial de temas o "2" para cargar la lista oficial de Djs');
+repeat
+	begin
+	readln(OpcionMenu);
+	case OpcionMenu of
+		1:begin
+		CargarListaOficial(vtemasOficiales,vDuracion);
+		CargarTemas:= true;
+		end;
+		2:begin
+		CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
+		CargarDjs:= true;
+		end;
+	else Writeln ('Opcion Invalida, intente nuevamente')
+	end
+	end
+until (CargarDjs = true) and (CargarTemas = true);
+Writeln('Ahora, Ingrese "1" para mostrar las listas cargadas, "2" para mostrar que Djs tocaran mas tiempo, "3" para mostrar los temas que se tocaran mas veces o "0" para terminar');
+repeat
+	Begin
+	Readln(OpcionMenu);
+	case OpcionMenu of
+		0:writeln();
+		1:MostrarListas(vDj,vTemasOficiales,vDuracion,mtemasasignados,cantdjs);
+		2:BuscoMaximo (mTemasAsignados, vAcumTiempo, vDj,vDuracion,vTemasOficiales);
+		3:TemasMaxRepetidos(mTemasAsignados,vTemasOficiales,vCont,vDuracion);
+    else Writeln('Opcion Invalida, intente nuevamente')
+    end
+    end
+until (OpcionMenu = 0);
+readln();
 
-	CargarListaOficial(vtemasOficiales,vDuracion);
-	CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
-	MostrarListas(vDj,vTemasOficiales,vDuracion,mtemasasignados,cantdjs);
-	BuscoMaximo (mTemasAsignados, vAcumTiempo, vDj,vDuracion,vTemasOficiales);
-	TemasMaxRepetidos(mTemasAsignados,vTemasOficiales,vCont,vDuracion);
-        readln;
-
-	
 
 End.
 
