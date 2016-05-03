@@ -450,7 +450,7 @@ y los guarda dentro de la matriz mTemasAsignados ademas modifica el vector vCant
 	end;
 
 
-Procedure CargarInfoDJs(var vDj:tvDj;var vCantTemasPorDj:tvCantTemasPorDj; var mTemasAsignados:tmTemasAsignados; vTemasOficiales:tvTemasOficiales;CantDjs:tCantDjs);
+Procedure CargarInfoDJs(var vDj:tvDj;var vCantTemasPorDj:tvCantTemasPorDj; var mTemasAsignados:tmTemasAsignados; vTemasOficiales:tvTemasOficiales;var CantDjs:tCantDjs);
 {Recibe la cantidad de Djs que tocaran y llama a los procedimientos LeerNombreDJ y IngresarTemasDj}
 var
 i:tIndiceDj;
