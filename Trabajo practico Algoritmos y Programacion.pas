@@ -44,10 +44,13 @@ Var
 	mTemasAsignados: tmTemasAsignados;
 	vCantTemasPorDj: tvCantTemasPorDj; { Vector Paralelo a la matriz de temas Djs indica Maximo Logico (numerico)}
 	Titulo: tTitulo;
-        DuracionEnSeg: tBaseDuracion;
-        CantDjs:tCantDjs; {funciona como ml (cuantos djs hay?) (numerico)}
-        vAcumTiempo:tvacumtiempo;
+	DuracionEnSeg: tBaseDuracion;
+	CantDjs:tCantDjs; {funciona como ml (cuantos djs hay?) (numerico)}
+	vAcumTiempo:tvacumtiempo;
 	vCont:tvCont;
+	OpcionMenu:Byte;
+	CargarTemas, CargarDjs:boolean;
+
 
 
 
@@ -654,13 +657,39 @@ end;
 {---------PROGRAMA PRINCIPAL---------}
 
 Begin
-
-	CargarListaOficial(vtemasOficiales,vDuracion);
-	CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
-	MostrarListas(vDj,vTemasOficiales,vDuracion,mtemasasignados,cantdjs);
-	BuscoMaximo (mTemasAsignados, vAcumTiempo, vDj,vDuracion,vTemasOficiales);
-	TemasMaxRepetidos(mTemasAsignados,vTemasOficiales,vCont,vDuracion);
-        readln;
+CargarDjs:= false;
+CargarTemas:= false;
+Writeln('Acontinuacion Ingrese "1" para cargar la lista oficial de temas o "2" para cargar la lista oficial de Djs');
+repeat
+	begin
+	readln(OpcionMenu);
+	case OpcionMenu of
+		1:begin
+		CargarListaOficial(vtemasOficiales,vDuracion);
+		CargarTemas:= true;
+		end;
+		2:begin
+		CargarInfoDJs(vDj,vCantTemasPorDj,mTemasAsignados,vTemasOficiales,CantDjs);
+		CargarDjs:= true;
+		end;
+	else Writeln ('Opcion Invalida, intente nuevamente')
+	end
+	end
+until (CargarDjs = true) and (CargarTemas = true);
+Writeln('Ahora, Ingrese "1" para mostrar las listas cargadas, "2" para mostrar que Djs tocaran mas tiempo, "3" para mostrar los temas que se tocaran mas veces o "0" para terminar');
+repeat
+	Begin
+	Readln(OpcionMenu);
+	case OpcionMenu of
+		0:writeln();
+		1:MostrarListas(vDj,vTemasOficiales,vDuracion,mtemasasignados,cantdjs);
+		2:BuscoMaximo (mTemasAsignados, vAcumTiempo, vDj,vDuracion,vTemasOficiales);
+		3:TemasMaxRepetidos(mTemasAsignados,vTemasOficiales,vCont,vDuracion);
+    else Writeln('Opcion Invalida, intente nuevamente')
+    end
+    end
+until (OpcionMenu = 0);
+readln();
 
 	{Esta hecho lo de cargar las listas de temas y de Djs, el punto 3 y el punto 4}
 
