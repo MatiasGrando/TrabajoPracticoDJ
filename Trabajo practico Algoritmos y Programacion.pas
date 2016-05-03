@@ -614,13 +614,10 @@ function PosicionTema(mTemasAsignados: tmTemasAsignados; vTemasOficiales: tvTema
 	j:byte;
 
 	begin
-		j:=0  ;
-		repeat
-		begin 
-		j:= j+1;
+		j:=1  ;
+		while (j <= MaxTemasOficiales) and (mTemasAsignados[auxdjposicion,i] <>  vTemasOficiales[j] ) do
+				j:= j+1;
 		PosicionTema:= j ;
-		end
-		until (j = MaxTemasOficiales) or (mTemasAsignados[auxdjposicion,i] = vTemasOficiales[j] );
 	end;
 Procedure OrdenarListasC1(var VecOrdPorSeg:tVecOrdPorSeg ;var vecOrdParaleloTemasPorSeg:tvecOrdParaleloTemasPorSeg);
 	var i,j:byte;
