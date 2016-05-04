@@ -2,15 +2,20 @@ Program TP1_Concierto;
 
 {Concierto con 25 dj's como max y 35 temas cada uno como max. 200 temas con sus duraciones mm:ss
 en una lista oficial.
-Hasta 25 nombres de DJ's y sus temas elegidos (no repetidos) a travez de un menu.}
+Hasta 25 nombres de DJ's y sus temas elegidos (no repetidos) a travez de un menu.
+Los datos ingresados deben:
+a)ser validados
+Hasta ahora estan hechas las listas de Temas y de Djs, los datos se validan cuando se van ingresando. Hay algunos lugares
+donde los operadores tiran una warning pero yo creo que funcionan bien y es problema de pascal que lo tira nomas como advertencia
+nombres alfanumericos-que passa si en el putno 2b tienen la misma duracion?}
 
 
 
 Const
 	Parar = '0'; {esta frase frena la carga de canciones}
-	MaxTemasOficiales = 35;
+        MaxTemasOficiales = 3;
 	MaxDuracion = 600;
-	MaxDj = 3;
+	MaxDj = 2;
 	MaxTemasPorDj = 35;
 	CaracteresTitulo = 30;
 	CaracteresNombre = 20;
@@ -305,7 +310,7 @@ Var
 	i: byte;
 
 Begin
-	Writeln ('Ingrese la lista de 200 temas oficiales con sus respectivas duraciones. La duracion del tema no puede exceder los 10 minutos, y debera ingresar dicha duracion en el formato mm:ss.');
+	Writeln ('Ingrese la lista de ',MaxTemasOficiales,' temas oficiales con sus respectivas duraciones. La duracion del tema no puede exceder los 10 minutos, y debera ingresar dicha duracion en el formato mm:ss.');
 	For i:=1 to MaxTemasOficiales do
 		Begin
 		Writeln ('Ingrese titulo.');
@@ -445,7 +450,7 @@ y los guarda dentro de la matriz mTemasAsignados ademas modifica el vector vCant
 	end;
 
 
-Procedure CargarInfoDJs(var vDj:tvDj;var vCantTemasPorDj:tvCantTemasPorDj; var mTemasAsignados:tmTemasAsignados; vTemasOficiales:tvTemasOficiales;var CantDjs:tCantDjs);
+Procedure CargarInfoDJs(var vDj:tvDj;var vCantTemasPorDj:tvCantTemasPorDj; var mTemasAsignados:tmTemasAsignados; vTemasOficiales:tvTemasOficiales;CantDjs:tCantDjs);
 {Recibe la cantidad de Djs que tocaran y llama a los procedimientos LeerNombreDJ y IngresarTemasDj}
 var
 i:tIndiceDj;
@@ -475,7 +480,7 @@ Procedure mostrarListasA1(vDj:tvDj);
 	begin
 	for i:=1 to MaxDj do
 		Writeln(vDj[i]);
-	
+
 	end;
 Procedure mostrarListasA2(vDj:tvDj);
 	var i,j:byte;
@@ -489,8 +494,8 @@ Procedure mostrarListasA2(vDj:tvDj);
 	 			vDj[j]:=vDj[j+1];
 	 			vDj[j+1]:= aux ;
 	 		end;
-	 	
-	
+
+
 	 for i:=1 to (MaxDj) do
 	 	writeln(vDj[i]);
 	end;
@@ -511,7 +516,7 @@ begin
 	 if (auxdecision<>1) and (auxdecision<>2) Then
 		Writeln('VALOR NO VALIDO');
 	until (auxdecision=1) or (auxdecision=2);
-		
+
 end;
 {---------------------------------------------------------------------------}
 Procedure mostrarListasB1(vTemasOficiales: tvTemasOficiales);{temas acendente y duracion desendente}
@@ -520,7 +525,7 @@ var i,j:byte;
 begin
 	for i:=1 to (MaxTemasOficiales-1) do
 		for j:=1 to (MaxTemasOficiales-1) do
-			if vTemasOficiales[j]>vDj[j+1] then
+			if vTemasOficiales[j]>vTemasOficiales[j+1] then
 	 		begin
 	 			aux:=vTemasOficiales[j];
 	 			vTemasOficiales[j]:=vTemasOficiales[j+1];
@@ -537,7 +542,8 @@ Procedure mostrarListasB2(vTemasOficiales: tvTemasOficiales;vDuracion: tvDuracio
 var
 	i,j:byte;
 	auxTitulo:tTitulo;
-	auxDuracion:tBaseDuracion;
+        auxDuracion:tBaseDuracion;
+
 begin
 	for i:=1 to (MaxTemasOficiales-1) do
 		for j:=1 to (MaxTemasOficiales-1) do
@@ -551,7 +557,10 @@ begin
 				vTemasOficiales[j+1] := auxTitulo
 				end;
 	for i:=1 to MaxTemasOficiales do
-		Writeln(  vTemasOficiales[i],('  ---> '),(vDuracion[i] div 60),(':'),(vDuracion[i] mod 60)    );
+        begin
+                Write(  vTemasOficiales[i],'  ---> ');
+                PasaraFormatoValido(vDuracion[i]);
+        end;
 end;
 
 
@@ -559,7 +568,7 @@ end;
 Procedure MostrarListasB(vTemasOficiales: tvTemasOficiales;vDuracion: tvDuracion);
 var auxdecision:byte;
 
-begin 	
+begin
 	repeat
 	writeln('Ver listado de temas') ;
 	writeln('1- Ordenado alfabeticamente en forma ascendente');
@@ -570,7 +579,7 @@ begin
 	if (auxdecision<>1) and (auxdecision<>2) Then
 		Writeln('VALOR NO VALIDO');
 	until (auxdecision=1) or (auxdecision=2);
-	
+
 
 end;
 {----------------------------------------------------------------------------}
@@ -579,7 +588,7 @@ function PosicionDj (vDj:tvDj;AuxNombre:tNombre;CantDjs:tCantDjs) : tIndiceDj;
  i:tIndiceDj;
  begin
  i:=1;
- while (i <= CantDjs ) and (vDj[i] <> AuxNombre ) do
+ while (i < CantDjs ) and (vDj[i] <> AuxNombre ) do
 
  	begin
 	 	i:= i+1 ;
@@ -591,16 +600,22 @@ function PosicionDj (vDj:tvDj;AuxNombre:tNombre;CantDjs:tCantDjs) : tIndiceDj;
 
  Procedure mostrarListasC2(vDj: tvDj ;mTemasAsignados: tmTemasAsignados;CantDjs:tCantDjs);
 	var     auxnombre:tnombre;
-		i:tIndiceTemasPorDj;
+		i,j:byte;
 
 	begin
 	writeln('Ingrese nombre del Dj');
 	readln(AuxNombre);
-
-
-        for i:=1 to MaxTemasPorDj do
-		writeln(mTemasAsignados[posiciondj(vDj,AuxNombre,CantDjs),i]);
-
+        i:=0;
+        repeat
+        i:=i+1;
+        until (AuxNombre=vDj[i]);
+        writeln('Los temas que toca ',vDj[i],' son:');
+        j:=1;
+        while (mTemasAsignados[i,j]<>'0') and (j<=MaxTemasPorDj) do
+        begin
+                writeln(mTemasAsignados[i,j]);
+                j:=j+1;
+        end;
 	end;
 
 {---------------------------------------------------------------------------}
@@ -610,7 +625,7 @@ function PosicionTema(mTemasAsignados: tmTemasAsignados; vTemasOficiales: tvTema
 
 	begin
 		j:=1  ;
-		while (j <= MaxTemasOficiales) and (mTemasAsignados[auxdjposicion,i] <>  vTemasOficiales[j] ) do
+		while (j < MaxTemasOficiales) and (mTemasAsignados[auxdjposicion,i] <>  vTemasOficiales[j] ) do
 				j:= j+1;
 		PosicionTema:= j ;
 	end;
@@ -634,7 +649,7 @@ Procedure OrdenarListasC1(var VecOrdPorSeg:tVecOrdPorSeg ;var vecOrdParaleloTema
 
 
 Procedure MostrarListasC1(vDj:tvDj; mTemasAsignados:tmTemasAsignados; CantDjs:tCantDjs; vTemasOficiales: tvTemasOficiales; vDuracion:tvDuracion);
-	var     auxnombre:tnombre;
+	var             auxnombre:tnombre;
 			i:tIndiceTemasPorDj;
 			j:tIndiceTemasPorDj;
 			auxdjposicion:tIndiceDj;
@@ -685,10 +700,10 @@ begin
 	if (auxdecision=2) then MostrarListasC2 (vDj,mTemasAsignados,CantDjs);
 
 	if (auxdecision<>1) and (auxdecision<>2) Then
-		
+
 		Writeln('VALOR NO VALIDO');
 	until (auxdecision=1) or (auxdecision=2);
-		
+
 
 
 end;
@@ -739,7 +754,8 @@ repeat
 	else Writeln ('Opcion Invalida, intente nuevamente')
 	end
 	end
-until (CargarDjs = true) and (CargarTemas = true);
+
+        until (CargarDjs = true) and (CargarTemas = true);
 repeat
 	Begin
 	Writeln('Ahora, Ingrese "1" para mostrar las listas cargadas, "2" para mostrar que Djs tocaran mas tiempo, "3" para mostrar los temas que se tocaran mas veces o "0" para terminar');
